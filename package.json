@@ -1,0 +1,26 @@
+{
+  "name": "wasteless",
+  "version": "1.0.0",
+  "description": "WasteLess monorepo: Client (React) and Server (Express + MongoDB API)",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c green,yellow \"npm run dev -w @wasteless/server\" \"npm run dev -w @wasteless/client\"",
+    "sync:shared": "node scripts/sync-shared.mjs",
+    "build": "npm run sync:shared && npm run build --workspaces --if-present",
+    "typecheck": "npm run sync:shared && npm run typecheck --workspaces --if-present",
+    "dev:server": "npm run dev -w @wasteless/server",
+    "dev:client": "npm run dev -w @wasteless/client",
+    "seed": "npm run seed -w @wasteless/server",
+    "migrate:legacy": "npm run migrate:legacy -w @wasteless/server",
+    "publish:client": "node scripts/publish.mjs client",
+    "publish:server": "node scripts/publish.mjs server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "license": "ISC"
+}

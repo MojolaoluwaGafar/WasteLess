@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* WasteLess design tokens. Every colour, shadow and animation used in the
+   app is named here, so the look can be changed in one place. `static` makes
+   Tailwind output every variable, including ones only used in the plain CSS
+   further down. The emails (apps/Server/src/emails/layout.ts) use the same
+   palette. */
+@theme static {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+
+  /* Warm cream surfaces, lightest to darkest. */
+  --color-surface: #f7f5ee;
+  --color-surface-low: #f1efe6;
+  --color-surface-container: #e9e7dc;
+  --color-surface-high: #e0ddd0;
+  --color-on-surface: #1b2a20;
+  --color-on-surface-variant: #4f5d52;
+  --color-outline: #7d8a7f;
+  --color-outline-variant: #cfd6c8;
+
+  /* Forest: the brand colour, for solid buttons and dark panels. Leaf is the
+     lighter green for links and icons. */
+  --color-forest: #1f3d2b;
+  --color-forest-deep: #14291c;
+  --color-leaf: #3f7d4e;
+  --color-leaf-soft: #6fa47a;
+  --color-mint: #e3efdf;
+
+  /* Sprout: the bright accent, used sparingly (highlights, the logo dot). */
+  --color-sprout: #c9e265;
+  --color-sprout-soft: #eef6c9;
+
+  /* Clay and amber: "use it today" and "use it soon". */
+  --color-clay: #c2562f;
+  --color-clay-soft: #fbe3d8;
+  --color-amber: #a86d0b;
+  --color-amber-soft: #fbefd2;
+
+  --color-error: #b3261e;
+  --color-error-container: #fde2df;
+  --color-success: #2f7a46;
+
+  /* Soft green-tinted shadows rather than grey ones. */
+  --shadow-card: 0 4px 20px -2px rgba(31, 61, 43, 0.07);
+  --shadow-lift: 0 12px 32px -4px rgba(31, 61, 43, 0.13);
+  --shadow-float: 0 16px 40px 0 rgba(31, 61, 43, 0.18);
+
+  /* Small CSS animations. Use with motion-safe: so people who ask for
+     reduced motion don't get them. */
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.3s ease-out both;
+  --animate-sheet-up: sheet-up 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes sheet-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Tailwind v4 no longer gives buttons a pointer cursor. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  /* One consistent keyboard focus ring. */
+  :focus-visible {
+    outline: 2px solid var(--color-leaf);
+    outline-offset: 2px;
+  }
+  /* 16px inputs stop iOS Safari zooming in when a field is tapped. */
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+/* Horizontal chip rows scroll without showing a scrollbar. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Loading placeholder with a moving sheen. */
+@utility skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-surface-container) 25%,
+    var(--color-surface-low) 50%,
+    var(--color-surface-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* Scroll reveal (see Components/Reveal.tsx): sections start slightly lower and
+   transparent, and settle into place the first time they scroll into view. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* react-toastify, restyled to match the brand. */
+:root {
+  --toastify-font-family: var(--font-sans);
+  --toastify-color-light: #ffffff;
+  --toastify-text-color-light: var(--color-on-surface);
+  --toastify-color-success: var(--color-success);
+  --toastify-color-error: var(--color-error);
+  --toastify-color-progress-light: var(--color-sprout);
+  --toastify-toast-bd-radius: 16px;
+  --toastify-toast-min-height: 52px;
+}
+.Toastify__toast {
+  box-shadow: var(--shadow-float);
+  font-size: 14px;
+}

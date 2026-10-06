@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+*.local
+*.log
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# Clones of the deploy repositories, managed by scripts/publish.mjs.
+.deploy/
